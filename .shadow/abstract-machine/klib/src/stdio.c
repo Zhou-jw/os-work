@@ -15,7 +15,7 @@ int pow(int x, int y) {
 }
 
 int printf(const char *fmt, ...) {
-  puts_debug("call printf here!\n");
+  puts_debug(fmt);
   char *str = (char *) fmt;
   va_list ap;
   va_start(ap, fmt);
@@ -43,7 +43,7 @@ int printf(const char *fmt, ...) {
             }
             continue;
         }
-      default: putch(*str); puts_debug("default case'!\n"); continue;
+      default: putch(*str); puts_debug("default case!\n"); continue;
     }
   }
   puts_debug("end printf here!\n");
