@@ -45,8 +45,8 @@ int printf(const char *fmt, ...) {
             continue;
         }
       default: 
-        str++;
         putch(*str);
+        str++;
         continue;
     }
   }
