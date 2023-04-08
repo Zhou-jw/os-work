@@ -21,8 +21,10 @@ int printf(const char *fmt, ...) {
   va_start(ap, fmt);
   int d;
   while(*str != '\0') {
+    puts_debug("into while here!\n");
     switch (*str++) {
       case '%':
+        puts_debug("case '%'!\n");
         str++;
         switch (*str) {
           case 'd':
@@ -41,7 +43,7 @@ int printf(const char *fmt, ...) {
             }
             continue;
         }
-        default: putch(*str); continue;
+      default: putch(*str); puts_debug("default case'!\n"); continue;
     }
   }
   puts_debug("end printf here!\n");
