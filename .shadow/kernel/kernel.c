@@ -56,7 +56,7 @@ void splash() {
 int main(const char *args) {
   ioe_init();
 
-  puts("mainarg = \"");
+  puts("mainargs = \"");
   puts(args);  // make run mainargs=xxx
   puts("\"\n");
 
