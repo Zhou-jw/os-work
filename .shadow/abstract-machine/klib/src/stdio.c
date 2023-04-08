@@ -42,9 +42,9 @@ int printf(const char *fmt, ...) {
             continue;
         }
         default: putch(*str); continue;
-      }
-      
+    }
   }
+  puts_debug("end printf here!\n");
   va_end(ap);
   // panic("Not implemented");
   return 0;
