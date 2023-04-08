@@ -33,16 +33,16 @@ int printf(const char *fmt, ...) {
         switch (*str) {
           case 'd':
             d = va_arg(ap, int);
-            int len = 0, tmp = d;
+            int len = 1, tmp = d;
             while(tmp / 10) {
               len++;
               tmp = tmp / 10;
             }
             char ch;
             while(len) {
-              ch = (char)((d / pow(10, len)) % 10) + '0';
+              ch = (char)((d / pow(10, len-1)) % 10) + '0';
               putch(ch);
-              d = d % pow(10, len);
+              d = d % pow(10, len-1);
               len--;
             }
             continue;
