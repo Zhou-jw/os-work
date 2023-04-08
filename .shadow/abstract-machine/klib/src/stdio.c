@@ -17,13 +17,13 @@ int pow(int x, int y) {
 int printf(const char *fmt, ...) {
   // puts_debug(fmt);
   char *str = (char *) fmt;
-  putch(*str);
+  // putch(*str);
   // puts_debug(str);
   va_list ap;
   va_start(ap, fmt);
   int d;
   while(*str != '\0') {
-    puts_debug("into while here!\n");
+    // puts_debug("into while here!\n");
     switch (*str) {
       case '%':
         str++;
@@ -49,7 +49,7 @@ int printf(const char *fmt, ...) {
         continue;
     }
   }
-  puts_debug("end printf here!\n");
+  // puts_debug("end printf here!\n");
   va_end(ap);
   // panic("Not implemented");
   return 0;
