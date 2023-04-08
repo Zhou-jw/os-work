@@ -152,8 +152,8 @@ clean:
 	rm -rf Makefile.html $(WORK_DIR)/build/
 .PHONY: clean
 
-debug: /build/kernel-$(ARCH)
-	qemu-system-x86_64 -s -S $< &  # Run QEMU in background
+debug: 
+	qemu-system-x86_64 -s -S ../kernel/build/kernel-$(ARCH) &  # Run QEMU in background
 	gdb -x init.gdb  # RTFM: gdb (1)
 
 ### Clean all sub-projects within depth 2 (and ignore errors)
