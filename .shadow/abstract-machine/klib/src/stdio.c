@@ -3,6 +3,9 @@
 #include <klib-macros.h>
 #include <stdarg.h>
 
+static inline void puts_debug(const char *s) {
+  for (; *s; s++) putch(*s);
+}
 
 #if !defined(__ISA_NATIVE__) || defined(__NATIVE_USE_KLIB__)
 
@@ -12,6 +15,7 @@ int pow(int x, int y) {
 }
 
 int printf(const char *fmt, ...) {
+  puts_debug("call printf here!\n");
   char *str = (char *) fmt;
   va_list ap;
   va_start(ap, fmt);
