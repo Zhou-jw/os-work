@@ -154,7 +154,7 @@ clean:
 .PHONY: clean
 
 debug: 
-	qemu-system-x86_64 -s -S ../kernel/build/kernel-$(ARCH) &  # Run QEMU in background
+	qemu-system-x86_64 -s ../kernel/build/kernel-$(ARCH) &  # Run QEMU in background
 	gdb -x init.gdb  # RTFM: gdb (1)
 
 ### Clean all sub-projects within depth 2 (and ignore errors)
