@@ -152,6 +152,9 @@ clean:
 	rm -rf Makefile.html $(WORK_DIR)/build/
 .PHONY: clean
 
+# debug: /build/
+# 	qemu-system-x86_64 -s -S $< &  # Run QEMU in background
+# 	gdb -x init.gdb  # RTFM: gdb (1)
 ### Clean all sub-projects within depth 2 (and ignore errors)
 CLEAN_ALL = $(dir $(shell find . -mindepth 2 -name Makefile))
 clean-all: $(CLEAN_ALL) clean
