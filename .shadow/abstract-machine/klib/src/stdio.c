@@ -49,6 +49,7 @@ int printf(const char *fmt, ...) {
         }
       default: putch(*str); puts_debug("default case!\n"); continue;
     }
+    str++;
   }
   puts_debug("end printf here!\n");
   va_end(ap);
