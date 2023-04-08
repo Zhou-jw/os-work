@@ -26,9 +26,6 @@ int printf(const char *fmt, ...) {
     puts_debug("into while here!\n");
     switch (*str) {
       case '%':
-        putch(*str);
-        putch('\n');
-        puts_debug("case '%'!\n");
         str++;
         switch (*str) {
           case 'd':
@@ -48,8 +45,6 @@ int printf(const char *fmt, ...) {
             continue;
         }
       default: 
-        putch(*str); 
-        puts_debug("default case!\n"); 
         str++;
         continue;
     }
