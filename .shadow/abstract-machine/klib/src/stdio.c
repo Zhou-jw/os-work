@@ -17,6 +17,8 @@ int pow(int x, int y) {
 int printf(const char *fmt, ...) {
   puts_debug(fmt);
   char *str = (char *) fmt;
+  putch('\n');
+  puts_debug(str);
   va_list ap;
   va_start(ap, fmt);
   int d;
