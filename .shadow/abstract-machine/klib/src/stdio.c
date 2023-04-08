@@ -51,6 +51,7 @@ int printf(const char *fmt, ...) {
   }
   // puts_debug("end printf here!\n");
   va_end(ap);
+  putch('\n');
   // panic("Not implemented");
   return 0;
 }
