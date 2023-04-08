@@ -29,6 +29,7 @@ int printf(const char *fmt, ...) {
         str++;
         switch (*str) {
           case 'd':
+          str++;
             d = va_arg(ap, int);
             int len = 1, tmp = d;
             while(tmp / 10) {
