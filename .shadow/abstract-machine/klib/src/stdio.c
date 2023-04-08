@@ -24,8 +24,10 @@ int printf(const char *fmt, ...) {
   int d;
   while(*str != '\0') {
     puts_debug("into while here!\n");
-    switch (*str++) {
+    switch (*str) {
       case '%':
+        putch(*str);
+        putch('\n');
         puts_debug("case '%'!\n");
         str++;
         switch (*str) {
