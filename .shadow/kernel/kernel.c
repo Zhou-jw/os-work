@@ -69,3 +69,10 @@ int main(const char *args) {
   }
   return 0;
 }
+/*
+# How to debug
+  qemu-system-x86_64 -Ss build/kernel-x86_64-qemu
+  gdb
+  (gdb) target remote localhost:1234
+**man qemu for more info**
+*/
