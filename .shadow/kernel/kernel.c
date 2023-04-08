@@ -4,6 +4,9 @@
 #include <klib-macros.h>
 
 #define SIDE 16
+#define ESC "\033["
+#define RED ESC "01;31m"
+#define CLR ESC "0m"
 
 static int w, h;  // Screen size
 
@@ -54,7 +57,7 @@ void splash() {
 
 // Operating system is a C program!
 int main(const char *args) {
-  for(const char *s = "Hello World!\n"; *s; s++) {
+  for(const char *s = RED "Hello World!\n" CLR; *s; s++) {
     putch(*s);
   }
   ioe_init();
