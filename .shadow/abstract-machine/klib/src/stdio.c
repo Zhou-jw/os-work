@@ -34,7 +34,7 @@ int printf(const char *fmt, ...) {
             }
             char ch;
             while(len) {
-              ch = (d / pow(10, len)) % 10 + '0';
+              ch = (char)((d / pow(10, len)) % 10) + '0';
               putch(ch);
               d = d % pow(10, len);
               len--;
