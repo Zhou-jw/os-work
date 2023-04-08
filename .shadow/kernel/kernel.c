@@ -62,8 +62,8 @@ int main(const char *args) {
 
   splash();
   int width = io_read(AM_GPU_CONFIG).width;
-  // int height = io_read(AM_GPU_CONFIG).height;
-  printf("%d", width);
+  int height = io_read(AM_GPU_CONFIG).height;
+  printf("%d %d", width, height);
   puts("Press any key to see its key code...\n");
   while (1) {
     print_key();
