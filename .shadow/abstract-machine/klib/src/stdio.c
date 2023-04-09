@@ -44,6 +44,9 @@ int printf(const char *fmt, ...) {
               len--;
             }
             continue;
+          case 's':
+            panic("printf(\%s) not implemented");
+            continue;
         }
       default: 
         putch(*str);

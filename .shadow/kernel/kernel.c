@@ -2,7 +2,7 @@
 #include <amdev.h>
 #include <klib.h>
 #include <klib-macros.h>
-
+#include "photop3.h"
 #define SIDE 1
 
 static int w, h;  // Screen size
@@ -64,6 +64,7 @@ int main(const char *args) {
   int width = io_read(AM_GPU_CONFIG).width;
   int height = io_read(AM_GPU_CONFIG).height;
   printf("%d %d", width, height);
+  printf("%d", atoi(photop3_ppm + 4));
   puts("Press any key to see its key code...\n");
   while (1) {
     print_key();
