@@ -78,7 +78,7 @@ static void draw(int x, int y, int w, int h, uint32_t color){
   ioe_write(AM_GPU_FBDRAW, &event);
 }
 
-int get_color(char *str) {
+uint32_t get_color(char *str) {
 
   char hex[10]="\0", tmp[1]="\0";
   for(int i = 1; i <= 3; i++) {
