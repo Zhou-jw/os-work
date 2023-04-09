@@ -24,12 +24,13 @@ char *strncpy(char *dst, const char *src, size_t n) {
 
 char *strcat(char *dst, const char *src) {
   size_t dst_len = strlen(dst);
-  putch(*src);putch(*(src+1));
+  // putch(*src);putch(*(src+1));
   size_t i = 0;
   do{
     dst[i+dst_len] = src[i];
-    i++;      
+    i++;  
   } while(*src != '\0');
+  printf("here");
   dst[dst_len + i] = '\0';
   return dst;
   // panic("Not implemented");
