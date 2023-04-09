@@ -111,7 +111,7 @@ uint32_t get_color(char *str, int *step) {
     str = str + len + 2;
     *step += len + 2;
   }
-  printf("color is %d, step is", dec, *step);
+  printf("color is %d, step is %d\n", dec, *step);
   return dec;
 }
 void disp_xy2uv(int pic_w, int pic_h, int width, int height,char *str) {
