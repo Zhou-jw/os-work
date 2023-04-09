@@ -91,7 +91,7 @@ uint32_t get_color(char *str) {
     }
     str = str + 2;
   }
-  printf("%s\n", hex);
+  printf("hex is %s\n", hex);
   int dec = 0, len = strlen(hex);
   for(int i = 0; i < len; i++) {
     dec = dec + hex[i] * pow(16, len-i-1);
@@ -104,10 +104,10 @@ void disp_xy2uv(int pic_w, int pic_h, int width, int height,char *str) {
   int u, v, color;
   for(int y=0; y<pic_w; y++) {
      for(int x=0; x<pic_h; x++) {
-      printf("display function \n");
+      // printf("display function \n");
       color = get_color(str);
-      u = x * height / pic_h;
-      v = y * width / pic_w;
+      u = x * width / pic_w;
+      v = y * height / pic_h;
       draw(u, v, 1, 1, color);
       str = str + 12;
     }

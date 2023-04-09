@@ -31,7 +31,7 @@ char *strcat(char *dst, const char *src) {
     dst[i+dst_len] = src[i];
     i++;  
   } while(src[i] != '\0');
-  printf("here");
+  // printf("here");
   dst[dst_len + i] = '\0';
   return dst;
   // panic("Not implemented");
