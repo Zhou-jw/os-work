@@ -90,7 +90,7 @@ uint32_t get_color(char *str) {
     }
     str = str + 2;
   }
-  printf("%s", hex);
+  printf("%s\n", hex);
   return atoi(hex);
 }
 void disp_xy2uv(int pic_w, int pic_h, int width, int height,char *str) {

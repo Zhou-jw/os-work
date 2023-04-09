@@ -24,10 +24,11 @@ char *strncpy(char *dst, const char *src, size_t n) {
 
 char *strcat(char *dst, const char *src) {
   size_t dst_len = strlen(dst);
-  size_t i;
-  for(i = 0; *src != '\0'; i++) {
+  size_t i = 0;
+  do{
     dst[i+dst_len] = src[i];
-  }
+    i++;      
+  } while(*src != '\0');
   dst[dst_len + i] = '\0';
   return dst;
   // panic("Not implemented");
