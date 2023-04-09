@@ -95,6 +95,7 @@ uint32_t get_color(char *str, int *step) {
   while(rgb < 3) {
     int len = 0;
     num = get_int(str, &len);
+    printf("%d", num);
     dec = dec + (num/16) * pow(16, power);
     dec = dec + (num % 16) * pow(16, power-1);
     power -= 2;
@@ -102,6 +103,7 @@ uint32_t get_color(char *str, int *step) {
     str = str + len + 2;
     *step += len + 2;
   }
+  putch('\n');
   // printf("color is %d, step is %d\n", dec, *step);
   return dec;
 }
@@ -118,7 +120,7 @@ void disp_xy2uv(int pic_w, int pic_h, int width, int height,char *str) {
       draw(u, v, 1, 1, color);
       str = str + step;
       // printf("now str is %c%c", *str, *(str+1));
-      putch(' ');
+      // putch(' ');
     }
   }
 }
