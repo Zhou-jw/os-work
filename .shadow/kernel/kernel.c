@@ -96,6 +96,7 @@ void disp_xy2uv(int pic_w, int pic_h, int width, int height,char *str) {
   int u, v, color;
   for(int x=0; x<pic_h; x++) {
     for(int y=0; y<pic_w; y++) {
+      printf("display function \n");
       color = get_color(str);
       u = x * height / pic_h;
       v = y * width / pic_w;
@@ -112,7 +113,7 @@ int main(const char *args) {
   puts(args);  // make run mainargs=xxx
   puts("\"\n");
 
-  splash();
+  // splash();
   int width = io_read(AM_GPU_CONFIG).width;
   int height = io_read(AM_GPU_CONFIG).height;
   int pic_w, pic_h;
