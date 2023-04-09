@@ -96,7 +96,7 @@ int get_int(char *str, int *len) {
   }
   return num;
 }
-uint32_t get_color(char *str) {
+uint32_t get_color(char *str, int *step) {
   int rgb = 0, len;
   char hex[10]="\0";
   while(rgb < 3) {
@@ -104,10 +104,11 @@ uint32_t get_color(char *str) {
     int2hex(get_int(str, &len), hex);
     rgb++;
     str = str + len + 2;
+    *step += len + 2;
   }
   printf("%s", hex);
   int dec = 0;
-  len = strlen(hex);
+  *step = strlen(hex);
   for(int i = 0; i < 6; i++) {
     dec = dec + (hex[i]-'0') * pow(16, 6-i-1);
   }
@@ -116,17 +117,18 @@ uint32_t get_color(char *str) {
 }
 void disp_xy2uv(int pic_w, int pic_h, int width, int height,char *str) {
   // display xy to uv with color (pic_h, pic_w) -> (width, height)
-  int u, v, color;
+  int u, v, color, step;
   for(int y=0; y<pic_w; y++) {
      for(int x=0; x<pic_h; x++) {
       // printf("display function \n");
-      color = get_color(str);
+      step = 0;
+      color = get_color(str, &step);
       u = x * width / pic_w;
       v = y * height / pic_h;
       draw(u, v, 1, 1, color);
-      str = str + 12;
+      str = str + step;
       // printf("now str is %c%c", *str, *(str+1));
-      // return;
+      return;
     }
   }
 }
