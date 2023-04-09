@@ -52,6 +52,15 @@ void splash() {
   }
 }
 
+void read_pic_wh(char *str, int *pic_w, int *pic_h) {
+  // read pic_w
+  *pic_w = atoi(str + 3);
+  str = str + 3;
+  while(*str != ' ')
+    str++;
+  *pic_h = atoi(str+1);
+}
+
 // Operating system is a C program!
 int main(const char *args) {
   ioe_init();
@@ -61,10 +70,10 @@ int main(const char *args) {
   puts("\"\n");
 
   splash();
-  int width = io_read(AM_GPU_CONFIG).width;
-  int height = io_read(AM_GPU_CONFIG).height;
-  int pic_w = atoi(photop3_ppm + 3), pic_h = atoi(photop3_ppm + 7);
-  printf("%d %d", width, height);
+  // int width = io_read(AM_GPU_CONFIG).width;
+  // int height = io_read(AM_GPU_CONFIG).height;
+  int pic_w, pic_h;
+  read_pic_wh(photop3_ppm, &pic_w, &pic_h);
   printf("%d %d", pic_w, pic_h);
   puts("Press any key to see its key code...\n");
   while (1) {
