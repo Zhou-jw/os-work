@@ -84,7 +84,8 @@ CFLAGS   += -O2 -MMD -Wall -Werror $(INCFLAGS) \
             -D__PLATFORM__=$(PLATFORM) -D__PLATFORM_$(shell echo $(PLATFORM) | tr a-z A-Z | tr - _) \
             -DARCH_H=\"arch/$(ARCH).h\" \
             -fno-asynchronous-unwind-tables -fno-builtin -fno-stack-protector \
-            -Wno-main -U_FORTIFY_SOURCE
+            -Wno-main -U_FORTIFY_SOURCE \
+			-ggdb
 CXXFLAGS +=  $(CFLAGS) -ffreestanding -fno-rtti -fno-exceptions
 ASFLAGS  += -MMD $(INCFLAGS)
 
@@ -151,6 +152,10 @@ image-dep: $(OBJS) am $(LIBS)
 clean:
 	rm -rf Makefile.html $(WORK_DIR)/build/
 .PHONY: clean
+
+debug: 
+	qemu-system-x86_64 -s ../kernel/build/kernel-$(ARCH) &  # Run QEMU in background
+	gdb -x init.gdb  # RTFM: gdb (1)
 
 ### Clean all sub-projects within depth 2 (and ignore errors)
 CLEAN_ALL = $(dir $(shell find . -mindepth 2 -name Makefile))
