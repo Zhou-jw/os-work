@@ -110,7 +110,7 @@ uint32_t get_color(char *str, int *step) {
 void disp_xy2uv(int pic_w, int pic_h, int width, int height,char *str) {
   // display xy to uv with color (pic_h, pic_w) -> (width, height)
   int u, v, color, step;
-  for(int y=0; y<pic_w; y++) {
+  for(int y=0; y<1; y++) {
      for(int x=0; x<3; x++) {
       // printf("display function \n");
       step = 0;
