@@ -25,6 +25,7 @@ char *strncpy(char *dst, const char *src, size_t n) {
 char *strcat(char *dst, const char *src) {
   size_t dst_len = strlen(dst);
   // putch(*src);putch(*(src+1));
+  printf("%d", *(src+1));
   size_t i = 0;
   do{
     dst[i+dst_len] = src[i];
