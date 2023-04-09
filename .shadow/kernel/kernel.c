@@ -80,7 +80,7 @@ static void draw(int x, int y, int w, int h, uint32_t color){
 }
 
 uint32_t get_color(char *str) {
-
+  puts("get_color func \n");
   char hex[10]="\0", tmp[1]="\0";
   for(int i = 1; i <= 3; i++) {
     for(int j = 1; j <= 2; j++) {
