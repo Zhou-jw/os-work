@@ -81,7 +81,7 @@ static void draw(int x, int y, int w, int h, uint32_t color){
 
 uint32_t get_color(char *str) {
   puts("get_color func \n");
-  char hex[10]="\0", tmp[1]="\0";
+  char hex[10]="\0", tmp[2]="0\0";
   for(int i = 1; i <= 3; i++) {
     for(int j = 1; j <= 2; j++) {
       *tmp = *str;
@@ -90,6 +90,7 @@ uint32_t get_color(char *str) {
     }
     str = str + 2;
   }
+  printf("%s", hex);
   return atoi(hex);
 }
 void disp_xy2uv(int pic_w, int pic_h, int width, int height,char *str) {
@@ -115,13 +116,13 @@ int main(const char *args) {
   puts("\"\n");
 
   // // splash();
-  // int width = io_read(AM_GPU_CONFIG).width;
-  // int height = io_read(AM_GPU_CONFIG).height;
-  // // int pic_w, pic_h;
-  // // int color_start = read_pic_wh(photop3_ppm, &pic_h, &pic_w);
-  // // printf("%d %d %d", pic_w, pic_h, color_start);
-  // // disp_xy2uv(pic_w, pic_h, width, height, photop3_ppm + color_start);
-  printf("%s is string", "absdcds");
+  int width = io_read(AM_GPU_CONFIG).width;
+  int height = io_read(AM_GPU_CONFIG).height;
+  int pic_w, pic_h;
+  int color_start = read_pic_wh(photop3_ppm, &pic_h, &pic_w);
+  printf("%d %d %d", pic_w, pic_h, color_start);
+  disp_xy2uv(pic_w, pic_h, width, height, photop3_ppm + color_start);
+  // printf("%s is string", "absdcds");
   puts("Press any key to see its key code...\n");
   while (1) {
     print_key();
