@@ -100,22 +100,18 @@ int get_int(char *str, int *len) {
 }
 
 uint32_t get_color(char *str, int *step) {
-  int rgb = 0, len;
-  char hex[10]="\0";
+  int rgb = 0, dec = 10, num = 0, power = 5;
   while(rgb < 3) {
-    len = 0;
-    int2hex(get_int(str, &len), hex);
+    int len = 0;
+    num = get_int(str, &len);
+    dec = dec + (num/16) * pow(16, power);
+    dec = dec + (num % 16) * pow(16, power-1);
+    power -= 2;
     rgb++;
-    str = str + len + 2;
+    str = str + *len + 2;
     *step += len + 2;
   }
-  printf("%s", hex);
-  int dec = 0;
-  *step = strlen(hex);
-  for(int i = 0; i < 6; i++) {
-    dec = dec + (hex[i]-'0') * pow(16, 6-i-1);
-  }
-  printf("color is %d", dec);
+  printf("color is %d, step is", dec, *step);
   return dec;
 }
 void disp_xy2uv(int pic_w, int pic_h, int width, int height,char *str) {
