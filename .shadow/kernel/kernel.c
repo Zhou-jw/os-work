@@ -68,7 +68,7 @@ int read_pic_wh(char *str, int *pic_w, int *pic_h) {
 
 static void draw(int x, int y, int w, int h, uint32_t color){
   uint32_t pixels[w * h]; // WARNING: large stack-allocated memory
-  puts("draw func\n");
+  // puts("draw func\n");
   AM_GPU_FBDRAW_T event = {
     .x = x, .y = y, .w = w, .h = h, .sync = 1,
     .pixels = pixels,
@@ -80,10 +80,11 @@ static void draw(int x, int y, int w, int h, uint32_t color){
 }
 
 uint32_t get_color(char *str) {
-  puts("get_color func \n");
+  // puts("get_color func \n");
   char hex[10]="\0", tmp[2]="0\0";
   for(int i = 1; i <= 3; i++) {
     for(int j = 1; j <= 2; j++) {
+
       *tmp = *str;
       strcat(hex, tmp);
       str++;
@@ -91,13 +92,18 @@ uint32_t get_color(char *str) {
     str = str + 2;
   }
   printf("%s\n", hex);
-  return atoi(hex);
+  int dec = 0, len = strlen(hex);
+  for(int i = 0; i < len; i++) {
+    dec = dec + hex[i] * pow(16, len-i-1);
+  }
+  printf("%d", dec);
+  return dec;
 }
 void disp_xy2uv(int pic_w, int pic_h, int width, int height,char *str) {
   // display xy to uv with color (pic_h, pic_w) -> (width, height)
   int u, v, color;
-  for(int x=0; x<pic_h; x++) {
-    for(int y=0; y<pic_w; y++) {
+  for(int y=0; y<pic_w; y++) {
+     for(int x=0; x<pic_h; x++) {
       printf("display function \n");
       color = get_color(str);
       u = x * height / pic_h;
