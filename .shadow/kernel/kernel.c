@@ -79,15 +79,6 @@ static void draw(int x, int y, int w, int h, uint32_t color){
   ioe_write(AM_GPU_FBDRAW, &event);
 }
 
-void int2hex(int dec, char *str) {
-  char hex[2]="0\0";
-  hex[0] = dec/16 + '0';
-  strcat(str, hex);
-  hex[1] = dec%16 +'0';
-  strcat(str, hex);
-  printf("in int2hex str is %s", str);
-}
-
 int get_int(char *str, int *len) {
   int num=0;
   while( '0' <= *str  && *str <='9') {
@@ -139,14 +130,14 @@ int main(const char *args) {
   puts(args);  // make run mainargs=xxx
   puts("\"\n");
 
-  splash();
-  // int width = io_read(AM_GPU_CONFIG).width;
-  // int height = io_read(AM_GPU_CONFIG).height;
-  // int pic_w, pic_h;
-  // int color_start = read_pic_wh(photop3_ppm, &pic_h, &pic_w);
-  // printf("%d %d %d", pic_w, pic_h, color_start);
-  // disp_xy2uv(pic_w, pic_h, width, height, photop3_ppm + color_start);
-  // printf("%s is string", "absdcds");
+  // splash();
+  int width = io_read(AM_GPU_CONFIG).width;
+  int height = io_read(AM_GPU_CONFIG).height;
+  int pic_w, pic_h;
+  int color_start = read_pic_wh(photop3_ppm, &pic_h, &pic_w);
+  printf("%d %d %d", pic_w, pic_h, color_start);
+  disp_xy2uv(pic_w, pic_h, width, height, photop3_ppm + color_start);
+  printf("%s is string", "absdcds");
   puts("Press any key to see its key code...\n");
   while (1) {
     print_key();
