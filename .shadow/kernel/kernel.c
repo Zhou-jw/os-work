@@ -111,7 +111,7 @@ void disp_xy2uv(int pic_w, int pic_h, int width, int height,char *str) {
   // display xy to uv with color (pic_h, pic_w) -> (width, height)
   int u, v, color, step;
   for(int y=0; y<pic_w; y++) {
-     for(int x=0; x<pic_h; x++) {
+     for(int x=0; x<3; x++) {
       // printf("display function \n");
       step = 0;
       color = get_color(str, &step);
