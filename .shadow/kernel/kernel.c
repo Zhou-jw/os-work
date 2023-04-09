@@ -68,6 +68,7 @@ int read_pic_wh(char *str, int *pic_w, int *pic_h) {
 
 static void draw(int x, int y, int w, int h, uint32_t color){
   uint32_t pixels[w * h]; // WARNING: large stack-allocated memory
+  puts("draw func\n");
   AM_GPU_FBDRAW_T event = {
     .x = x, .y = y, .w = w, .h = h, .sync = 1,
     .pixels = pixels,
