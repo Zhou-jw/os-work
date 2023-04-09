@@ -63,7 +63,7 @@ int read_pic_wh(char *str, int *pic_w, int *pic_h) {
   str++;
   while(*str >= '0' && *str <= '9') 
     str++;
-  return str-tmp;
+  return str-tmp+5;
 }
 
 // static void draw(int x, int y, int w, int h, uint32_t color){
@@ -104,6 +104,7 @@ int main(const char *args) {
   int pic_w, pic_h;
   int color_start = read_pic_wh(photop3_ppm, &pic_h, &pic_w);
   printf("%d %d %d", pic_w, pic_h, color_start);
+  putch(*(photop3_ppm + color_start));
   puts("Press any key to see its key code...\n");
   while (1) {
     print_key();
