@@ -82,11 +82,12 @@ static void draw(int x, int y, int w, int h, uint32_t color){
 int get_int(char *str, int *len) {
   int num=0;
   while( '0' <= *str  && *str <='9') {
+    putch(*str);
     num = num*10 + (*str - '0');
     str++;
     (*len)++;
   }
-  // printf("in get_int() num is %d, len is %d", num, *len);
+  printf("in get_int() num is %d, len is %d", num, *len);
   return num;
 }
 
@@ -95,7 +96,7 @@ uint32_t get_color(char *str, int *step) {
   while(rgb < 3) {
     int len = 0;
     num = get_int(str, &len);
-    printf("%d", num);
+    // printf("%d", num);
     dec = dec + (num/16) * pow(16, power);
     dec = dec + (num % 16) * pow(16, power-1);
     power -= 2;
