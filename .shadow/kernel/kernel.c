@@ -63,8 +63,9 @@ int main(const char *args) {
   splash();
   int width = io_read(AM_GPU_CONFIG).width;
   int height = io_read(AM_GPU_CONFIG).height;
+  int pic_w = atoi(photop3_ppm + 3), pic_h = atoi(photop3_ppm + 7);
   printf("%d %d", width, height);
-  printf("%d", atoi(photop3_ppm + 3));
+  printf("%d %d", pic_w, pic_h);
   puts("Press any key to see its key code...\n");
   while (1) {
     print_key();
