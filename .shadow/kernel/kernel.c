@@ -3,7 +3,7 @@
 #include <klib.h>
 #include <klib-macros.h>
 #include "photop3.h"
-#define SIDE 1
+#define SIDE 16
 
 static int w, h;  // Screen size
 
