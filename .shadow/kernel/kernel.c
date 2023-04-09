@@ -121,7 +121,7 @@ int main(const char *args) {
   // // int color_start = read_pic_wh(photop3_ppm, &pic_h, &pic_w);
   // // printf("%d %d %d", pic_w, pic_h, color_start);
   // // disp_xy2uv(pic_w, pic_h, width, height, photop3_ppm + color_start);
-  printf("%s", "absdcds");
+  printf("%s is string", "absdcds");
   puts("Press any key to see its key code...\n");
   while (1) {
     print_key();
