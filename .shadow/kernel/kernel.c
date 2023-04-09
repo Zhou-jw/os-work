@@ -66,30 +66,44 @@ int read_pic_wh(char *str, int *pic_w, int *pic_h) {
   return str-tmp+5;
 }
 
-// static void draw(int x, int y, int w, int h, uint32_t color){
-//   uint32_t pixels[w * h]; // WARNING: large stack-allocated memory
-//   AM_GPU_FBDRAW_T event = {
-//     .x = x, .y = y, .w = w, .h = h, .sync = 1,
-//     .pixels = pixels,
-//   };
-//   for (int i = 0; i < w * h; i++) {
-//     pixels[i] = color;
-//   }
-//   ioe_write(AM_GPU_FBDRAW, &event);
-// }
-// int get_color() {
-//   int color
-// }
-// void disp_xy2uv(int pic_w, int pic_h, int width, int height,char *str) {
-//   // display xy to uv with color (pic_h, pic_w) -> (width, height)
-//   for(int x=0; x<pic_h; x++) {
-//     for(int y=0; y<pic_w; y++) {
-//       u = x * height / pic_h;
-//       v = y * width / pic_w;
-//       draw(u, v, 1, 1, color);
-//     }
-//   }
-// }
+static void draw(int x, int y, int w, int h, uint32_t color){
+  uint32_t pixels[w * h]; // WARNING: large stack-allocated memory
+  AM_GPU_FBDRAW_T event = {
+    .x = x, .y = y, .w = w, .h = h, .sync = 1,
+    .pixels = pixels,
+  };
+  for (int i = 0; i < w * h; i++) {
+    pixels[i] = color;
+  }
+  ioe_write(AM_GPU_FBDRAW, &event);
+}
+
+int get_color(char *str) {
+
+  char hex[10]="\0", tmp[1]="\0";
+  for(int i = 1; i <= 3; i++) {
+    for(int j = 1; j <= 2; j++) {
+      *tmp = *str;
+      strcat(hex, tmp);
+      str++;
+    }
+    str = str + 2;
+  }
+  return atoi(hex);
+}
+void disp_xy2uv(int pic_w, int pic_h, int width, int height,char *str) {
+  // display xy to uv with color (pic_h, pic_w) -> (width, height)
+  int u, v, color;
+  for(int x=0; x<pic_h; x++) {
+    for(int y=0; y<pic_w; y++) {
+      color = get_color(str);
+      u = x * height / pic_h;
+      v = y * width / pic_w;
+      draw(u, v, 1, 1, color);
+      str = str + 12;
+    }
+  }
+}
 
 // Operating system is a C program!
 int main(const char *args) {
@@ -104,7 +118,7 @@ int main(const char *args) {
   int pic_w, pic_h;
   int color_start = read_pic_wh(photop3_ppm, &pic_h, &pic_w);
   printf("%d %d %d", pic_w, pic_h, color_start);
-  putch(*(photop3_ppm + color_start));
+
   puts("Press any key to see its key code...\n");
   while (1) {
     print_key();
