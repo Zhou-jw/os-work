@@ -94,8 +94,10 @@ int get_int(char *str, int *len) {
     str++;
     (*len)++;
   }
+  printf("in get_int() num is %d, len is %d", num, *len);
   return num;
 }
+
 uint32_t get_color(char *str, int *step) {
   int rgb = 0, len;
   char hex[10]="\0";
