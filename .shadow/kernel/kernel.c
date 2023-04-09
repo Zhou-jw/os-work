@@ -85,6 +85,7 @@ void int2hex(int dec, char *str) {
   strcat(str, hex);
   hex[1] = dec%16 +'0';
   strcat(str, hex);
+  printf("in int2hex str is %s", str);
 }
 
 int get_int(char *str, int *len) {
