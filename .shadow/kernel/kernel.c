@@ -105,6 +105,7 @@ uint32_t get_color(char *str) {
     rgb++;
     str = str + len + 2;
   }
+  printf("%s", hex);
   int dec = 0;
   len = strlen(hex);
   for(int i = 0; i < 6; i++) {
