@@ -23,6 +23,7 @@ int printf(const char *fmt, ...) {
   va_start(ap, fmt);
   int d;
   char *s;
+  char c;
   while(*str != '\0') {
     // puts_debug("into while here!\n");
     switch (*str) {
@@ -30,7 +31,7 @@ int printf(const char *fmt, ...) {
         str++;
         switch (*str) {
           case 'd':
-          str++;
+            str++;
             d = va_arg(ap, int);
             int len = 1, tmp = d;
             while(tmp / 10) {
@@ -51,6 +52,11 @@ int printf(const char *fmt, ...) {
               putch(*s);
               s++;
             }
+            str++;
+            continue;
+          case 'c':
+            c = va_arg(ap, int);
+            putch((char)c);
             str++;
             continue;
         }
