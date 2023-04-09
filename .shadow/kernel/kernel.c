@@ -100,7 +100,7 @@ int get_int(char *str, int *len) {
 }
 
 uint32_t get_color(char *str, int *step) {
-  int rgb = 0, dec = 10, num = 0, power = 5;
+  int rgb = 0, dec = 0, num = 0, power = 5;
   while(rgb < 3) {
     int len = 0;
     num = get_int(str, &len);
