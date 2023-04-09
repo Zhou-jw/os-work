@@ -101,10 +101,14 @@ uint32_t get_color(char *str, int *step) {
     dec = dec + (num % 16) * pow(16, power-1);
     power -= 2;
     rgb++;
-    str = str + len + 2;
-    *step += len + 2;
+    str = str + len;
+    *step += len;
+    while(!('0' <= *str  && *str <='9')) {
+      str++;
+      (*step)++;
+    }
   }
-  putch('\n');
+  // putch('\n');
   // printf("color is %d, step is %d\n", dec, *step);
   return dec;
 }
