@@ -79,24 +79,38 @@ static void draw(int x, int y, int w, int h, uint32_t color){
   ioe_write(AM_GPU_FBDRAW, &event);
 }
 
-uint32_t get_color(char *str) {
-  // puts("get_color func \n");
-  char hex[10]="\0", tmp[2]="0\0";
-  for(int i = 1; i <= 3; i++) {
-    for(int j = 1; j <= 2; j++) {
+void int2hex(int dec, char *str) {
+  char hex[2]="0\0";
+  hex[0] = dec/16 + '0';
+  strcat(str, hex);
+  hex[1] = dec%16 +'0';
+  strcat(str, hex);
+}
 
-      *tmp = *str;
-      strcat(hex, tmp);
-      printf("hex is %s\n", hex);
-      str++;
-    }
-    str = str + 2;
+int get_int(char *str, int *len) {
+  int num=0;
+  while( '0' <= *str  && *str <='9') {
+    num = num*10 + (*str - '0');
+    str++;
+    (*len)++;
   }
-  int dec = 0, len = strlen(hex);
-  for(int i = 0; i < len; i++) {
-    dec = dec + (hex[i]-'0') * pow(16, len-i-1);
+  return num;
+}
+uint32_t get_color(char *str) {
+  int rgb = 0, len;
+  char hex[10]="\0";
+  while(rgb < 3) {
+    len = 0;
+    int2hex(get_int(str, &len), hex);
+    rgb++;
+    str = str + len + 2;
   }
-  // printf("%d", dec);
+  int dec = 0;
+  len = strlen(hex);
+  for(int i = 0; i < 6; i++) {
+    dec = dec + (hex[i]-'0') * pow(16, 6-i-1);
+  }
+  printf("color is %d", dec);
   return dec;
 }
 void disp_xy2uv(int pic_w, int pic_h, int width, int height,char *str) {
