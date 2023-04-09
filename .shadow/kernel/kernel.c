@@ -114,14 +114,14 @@ int main(const char *args) {
   puts(args);  // make run mainargs=xxx
   puts("\"\n");
 
-  // splash();
-  int width = io_read(AM_GPU_CONFIG).width;
-  int height = io_read(AM_GPU_CONFIG).height;
-  int pic_w, pic_h;
-  int color_start = read_pic_wh(photop3_ppm, &pic_h, &pic_w);
-  // printf("%d %d %d", pic_w, pic_h, color_start);
-  disp_xy2uv(pic_w, pic_h, width, height, photop3_ppm + color_start);
-
+  // // splash();
+  // int width = io_read(AM_GPU_CONFIG).width;
+  // int height = io_read(AM_GPU_CONFIG).height;
+  // // int pic_w, pic_h;
+  // // int color_start = read_pic_wh(photop3_ppm, &pic_h, &pic_w);
+  // // printf("%d %d %d", pic_w, pic_h, color_start);
+  // // disp_xy2uv(pic_w, pic_h, width, height, photop3_ppm + color_start);
+  printf("%s", "absdcds");
   puts("Press any key to see its key code...\n");
   while (1) {
     print_key();

@@ -22,6 +22,7 @@ int printf(const char *fmt, ...) {
   va_list ap;
   va_start(ap, fmt);
   int d;
+  char *s;
   while(*str != '\0') {
     // puts_debug("into while here!\n");
     switch (*str) {
@@ -45,7 +46,12 @@ int printf(const char *fmt, ...) {
             }
             continue;
           case 's':
-            panic("printf(\%s) not implemented");
+            s = va_arg(ap, char*);
+            while(*s) {
+              putch(*s);
+              s++;
+            }
+            str++;
             continue;
         }
       default: 
