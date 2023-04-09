@@ -110,6 +110,7 @@ void disp_xy2uv(int pic_w, int pic_h, int width, int height,char *str) {
       v = y * height / pic_h;
       draw(u, v, 1, 1, color);
       str = str + 12;
+      return;
     }
   }
 }
