@@ -87,11 +87,11 @@ uint32_t get_color(char *str) {
 
       *tmp = *str;
       strcat(hex, tmp);
+      printf("hex is %s\n", hex);
       str++;
     }
     str = str + 2;
   }
-  printf("hex is %s\n", hex);
   int dec = 0, len = strlen(hex);
   for(int i = 0; i < len; i++) {
     dec = dec + hex[i] * pow(16, len-i-1);
