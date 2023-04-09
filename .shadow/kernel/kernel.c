@@ -61,8 +61,9 @@ int read_pic_wh(char *str, int *pic_w, int *pic_h) {
     str++;
   *pic_w = atoi(str+1);
   str++;
-  putch(*(str+1));
-  return str+4-tmp;
+  while(*str >= '0' && *str <= '9') 
+    str++;
+  return str-tmp;
 }
 
 // static void draw(int x, int y, int w, int h, uint32_t color){
