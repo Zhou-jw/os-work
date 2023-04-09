@@ -82,7 +82,7 @@ static void draw(int x, int y, int w, int h, uint32_t color){
 int get_int(char *str, int *len) {
   int num=0;
   while( '0' <= *str  && *str <='9') {
-    putch(*str);
+    // putch(*str);
     num = num*10 + (*str - '0');
     str++;
     (*len)++;
