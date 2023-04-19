@@ -24,6 +24,7 @@ void *wrapper(void *arg) {
 
 void create(void *fn) {
   assert(tptr - tpool < NTHREAD);
+  // printf("tptr - tpool is %d ", (tptr - tpool));
   *tptr = (struct thread) {
     .id = tptr - tpool + 1,
     .status = T_LIVE,
