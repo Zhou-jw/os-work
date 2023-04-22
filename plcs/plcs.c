@@ -52,7 +52,7 @@ void Tworker(int id) {
   result = dp[N - 1][M - 1];
   atomic_fetch_add(&done, 1);
 }
-static inline int belongs(int thisr, int tid) { return thisr % T == tid - 2; }
+static inline int belongs(int num, int tid) { return num % T == tid - 2; }
 
 static inline int can_calculate(int r, int r_done) {
   if (r <= MIN(N, M) && r_done == r) {
@@ -66,31 +66,41 @@ static inline int can_calculate(int r, int r_done) {
 }
 
 void plcs_thread(int tid) {
+  printf("tid is %d\n\n", tid);
   while (1) {
     mutex_lock(&lk);
-    if (done) return;
     while (!can_calculate(r, last_r_done)) {
       cond_wait(&cv, &lk);
     }
-    mutex_unlock(&lk);
-    int num = 0;
+    if (done) {
+      mutex_unlock(&lk);
+      return;
+    }
+    // mutex_unlock(&lk);
     for (int i = 0; i < N; i++) {
       for (int j = 0; j < M; j++) {
-        if (i + j == r && belongs(num, tid)) {
+        // if (i == 2 && j == 2) {
+        //   printf("r=%d dp[2][2] : %d, belongs(%d, %d), %d\n\n", r, dp[2][2], i, tid, belongs(i, tid));
+        // }
+        if (i+j == r && belongs(i, tid) && !dp_flag[i][j]) {
           int skip_a = DP(i - 1, j);
           int skip_b = DP(i, j - 1);
           int take_both = DP(i - 1, j - 1) + (A[i] == B[j]);
           dp[i][j] = MAX3(skip_a, skip_b, take_both);
-          num++;
+          this_r_done++;
+          dp_flag[i][j]=1;
+          // printf("tid is %d\n", tid);
+          // printf("skip_a is %d\n", skip_a);
+          // printf("skip_b is %d\n", skip_b);
+          // printf("take_both is %d\n", take_both);
+          // printf("r is %d,dp[%d][%d] is %d\n\n", r, i, j, dp[i][j]);
           break;
         }
         if (i + j > r) break;
       }
     }
-    mutex_lock(&lk);
-    this_r_done += num;
-    assert(num <= MAX(N, M));
-    cond_broadcast(&cv);
+    // mutex_lock(&lk);
+    assert(this_r_done <= MAX(N, M));
     if (can_calculate(r + 1, this_r_done)) {
       last_r_done = this_r_done;
       this_r_done = 0;
@@ -100,6 +110,7 @@ void plcs_thread(int tid) {
       done = 1;
       result = dp[N - 1][M - 1];
     }
+    cond_broadcast(&cv);
     mutex_unlock(&lk);
   }
 }
@@ -107,7 +118,7 @@ void plcs_thread(int tid) {
 int main(int argc, char *argv[]) {
   // No need to change
   FILE *fp;
-  fp = fopen("/home/zjw/os-workbench/plcs/test1.txt", "r");
+  fp = fopen("/home/zjw/os-workbench/plcs/test.txt", "r");
   assert(fscanf(fp, "%s%s", A, B) == 2);
   // printf("%s, %s\n", A, B);
   N = strlen(A);
@@ -119,13 +130,11 @@ int main(int argc, char *argv[]) {
   create(Ttime);
   // Add preprocessing code here
 
-  // for (int i = 0; i < T; i++) {
-  //   create(plcs_thread);  // plcs_thread's tid begins with 2; Ttime(tid = 1)
-  // }
-  create(plcs_thread);
-  create(plcs_thread);
+  for (int i = 0; i < T; i++) {
+    create(plcs_thread);  // plcs_thread's tid begins with 2; Ttime(tid = 1)
+  }
   join();
-  printf("your answer is %d\n", dp[N - 1][M - 1]);
+  printf("your answer is %d\n", result);
 
   create(Tworker);
   join();
