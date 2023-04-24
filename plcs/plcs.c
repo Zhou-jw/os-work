@@ -8,7 +8,7 @@
 #define MAXN 10000
 int T, N, M, Round;
 char A[MAXN + 1], B[MAXN + 1];
-int dp[MAXN][MAXN], dp_flag[MAXN][MAXN], flag[2 * MAXN];
+int dp[MAXN][MAXN], flag[2 * MAXN];
 int result;
 
 #define DP(x, y) (((x) >= 0 && (y) >= 0) ? dp[x][y] : 0)
@@ -26,8 +26,8 @@ void Ttime(int id) {
   float ms = 0;
   while (1) {
     if (atomic_load(&done) == 1) break;
-    usleep(100000 / 2);
-    ms += 100.0 / 2;
+    usleep(1000);
+    ms += 1.0;
   }
   printf("Approximate running time: %.1lfs\n", ms / 1000);
 }
@@ -58,18 +58,15 @@ static inline int belongs(int num, int tid) {
 }
 
 static inline int can_calculate(int r) {
-  int ok = 1;
-  if(r == 0) return ok;
-  if (!flag[r - 1]) {
-    for (int i = 0; i < N; i++) {
-      int j = r - i - 1;
-      if (0 <= j && j < M) {
-        if (!dp_flag[i][j]) {
-          ok = 0;
-        }  // every dp[i][j] in last round is done
-      }
-    }
-    if(ok) flag[r - 1] = 1;
+  int ok = 0;
+  if (r == 0)
+    ok = 1;
+  else if (0 < r && r < MIN(N, M) && (r - 1) + 1 == flag[r - 1]) {
+    ok = 1;
+  } else if (MIN(N, M) <= r && r < MAX(N, M) && MIN(N, M) == flag[r - 1]) {
+    ok = 1;
+  } else if (MAX(N, M) <= r && flag[r - 1] == Round - (r - 1)) {
+    ok = 1;
   }
   return ok;
 }
@@ -82,16 +79,17 @@ void plcs_thread(int tid) {
       cond_wait(&cv, &lk);
     }
     mutex_unlock(&lk);
-    int num = 0;
+    int cnt = 0, num = 0;
     for (int i = 0; i < N; i++) {
       int j = r - i;
-      if (0 <= j && j < M) num++;
-      if (0 <= j && j < M && belongs(num, tid)) {
+      if (j < 0) break;
+      if (0 <= j && j < M) cnt++;
+      if (0 <= j && j < M && belongs(cnt, tid)) {
         int skip_a = DP(i - 1, j);
         int skip_b = DP(i, j - 1);
         int take_both = DP(i - 1, j - 1) + (A[i] == B[j]);
         dp[i][j] = MAX3(skip_a, skip_b, take_both);
-        dp_flag[i][j] = 1;
+        num++;
         // printf("tid is %d\n", tid);
         // printf("skip_a is %d\n", skip_a);
         // printf("skip_b is %d\n", skip_b);
@@ -101,6 +99,7 @@ void plcs_thread(int tid) {
     }
     // assert(r <= Round);
     mutex_lock(&lk);
+    flag[r] += num;
     cond_broadcast(&cv);
     mutex_unlock(&lk);
   }
@@ -111,7 +110,7 @@ void plcs_thread(int tid) {
 int main(int argc, char *argv[]) {
   // No need to change
   FILE *fp;
-  fp = fopen("/home/zjw/os-workbench/plcs/test.txt", "r");
+  fp = fopen("test.txt", "r");
   assert(fscanf(fp, "%s%s", A, B) == 2);
   // printf("%s, %s\n", A, B);
   N = strlen(A);
