@@ -1,14 +1,14 @@
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "thread.h"
-#include "thread-sync.h"
 
+#include "thread-sync.h"
+#include "thread.h"
 
 #define MAXN 10000
 int T, N, M, Round;
 char A[MAXN + 1], B[MAXN + 1];
-int dp[MAXN][MAXN], dp_flag[MAXN][MAXN];
+int dp[MAXN][MAXN], dp_flag[MAXN][MAXN], flag[2 * MAXN];
 int result;
 
 #define DP(x, y) (((x) >= 0 && (y) >= 0) ? dp[x][y] : 0)
@@ -19,14 +19,15 @@ int result;
 mutex_t lk = MUTEX_INIT();
 cond_t cv = COND_INIT();
 _Atomic int done = 0;
-int last_r_done = 0, this_r_done = 0, r = 0;
+
+void test() { return; }
 
 void Ttime(int id) {
   float ms = 0;
   while (1) {
     if (atomic_load(&done) == 1) break;
-    usleep(1000 / 2);
-    ms += 1000.0 / 2;
+    usleep(100000 / 2);
+    ms += 100.0 / 2;
   }
   printf("Approximate running time: %.1lfs\n", ms / 1000);
 }
@@ -52,67 +53,59 @@ void Tworker(int id) {
   result = dp[N - 1][M - 1];
   atomic_fetch_add(&done, 1);
 }
-static inline int belongs(int num, int tid) { return num % T == tid - 2; }
+static inline int belongs(int num, int tid) {
+  return (num / 2000) % T == tid - 2;
+}
 
-static inline int can_calculate(int r, int r_done) {
-  if (r <= MIN(N, M) && r_done == r) {
-    return 1;
-  } else if (MIN(N, M) < r && r <= Round - MAX(N, M) && r_done == MIN(N, M)) {
-    return 1;
-  } else if (MAX(M, N) < r && r_done == Round - r + 1) {
-    return 1;
+static inline int can_calculate(int r) {
+  int ok = 1;
+  if(r == 0) return ok;
+  if (!flag[r - 1]) {
+    for (int i = 0; i < N; i++) {
+      int j = r - i - 1;
+      if (0 <= j && j < M) {
+        if (!dp_flag[i][j]) {
+          ok = 0;
+        }  // every dp[i][j] in last round is done
+      }
+    }
+    if(ok) flag[r - 1] = 1;
   }
-  return 0;
+  return ok;
 }
 
 void plcs_thread(int tid) {
-  printf("tid is %d\n\n", tid);
-  while (1) {
+  // printf("tid is %d\n\n", tid);
+  for (int r = 0; r < Round; r++) {
     mutex_lock(&lk);
-    while (!can_calculate(r, last_r_done)) {
+    while (!can_calculate(r)) {
       cond_wait(&cv, &lk);
     }
-    if (done) {
-      mutex_unlock(&lk);
-      return;
-    }
-    // mutex_unlock(&lk);
+    mutex_unlock(&lk);
+    int num = 0;
     for (int i = 0; i < N; i++) {
-      for (int j = 0; j < M; j++) {
-        // if (i == 2 && j == 2) {
-        //   printf("r=%d dp[2][2] : %d, belongs(%d, %d), %d\n\n", r, dp[2][2], i, tid, belongs(i, tid));
-        // }
-        if (i+j == r && belongs(i, tid) && !dp_flag[i][j]) {
-          int skip_a = DP(i - 1, j);
-          int skip_b = DP(i, j - 1);
-          int take_both = DP(i - 1, j - 1) + (A[i] == B[j]);
-          dp[i][j] = MAX3(skip_a, skip_b, take_both);
-          this_r_done++;
-          dp_flag[i][j]=1;
-          // printf("tid is %d\n", tid);
-          // printf("skip_a is %d\n", skip_a);
-          // printf("skip_b is %d\n", skip_b);
-          // printf("take_both is %d\n", take_both);
-          // printf("r is %d,dp[%d][%d] is %d\n\n", r, i, j, dp[i][j]);
-          break;
-        }
-        if (i + j > r) break;
+      int j = r - i;
+      if (0 <= j && j < M) num++;
+      if (0 <= j && j < M && belongs(num, tid)) {
+        int skip_a = DP(i - 1, j);
+        int skip_b = DP(i, j - 1);
+        int take_both = DP(i - 1, j - 1) + (A[i] == B[j]);
+        dp[i][j] = MAX3(skip_a, skip_b, take_both);
+        dp_flag[i][j] = 1;
+        // printf("tid is %d\n", tid);
+        // printf("skip_a is %d\n", skip_a);
+        // printf("skip_b is %d\n", skip_b);
+        // printf("take_both is %d\n", take_both);
+        // printf("r is %d, dp[%d][%d] is %d\n", r, i, j, dp[i][j]);
       }
     }
-    // mutex_lock(&lk);
-    assert(this_r_done <= MAX(N, M));
-    if (can_calculate(r + 1, this_r_done)) {
-      last_r_done = this_r_done;
-      this_r_done = 0;
-      r++;
-    }
-    if (r == Round) {
-      done = 1;
-      result = dp[N - 1][M - 1];
-    }
+    // assert(r <= Round);
+    mutex_lock(&lk);
     cond_broadcast(&cv);
     mutex_unlock(&lk);
   }
+  done = 1;
+  result = dp[N - 1][M - 1];
 }
 
 int main(int argc, char *argv[]) {
@@ -136,9 +129,9 @@ int main(int argc, char *argv[]) {
   join();
   printf("your answer is %d\n", result);
 
-  create(Tworker);
-  join();
-  printf("correct answer is %d\n", result);
+  // create(Tworker);
+  // join();
+  // printf("correct answer is %d\n", result);
   return 0;
 }
 /*
