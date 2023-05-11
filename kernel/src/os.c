@@ -4,12 +4,20 @@ static void os_init() {
   pmm->init();
 }
 
+#ifndef TESTppm 
 static void os_run() {
   for (const char *s = "Hello World from CPU #*\n"; *s; s++) {
     putch(*s == '*' ? '0' + cpu_current() : *s);
   }
   while (1) ;
 }
+#else 
+static void os_run() {
+  printf("test the ppm\n");
+  test_ppm();
+  while (1) ;
+}
+#endif
 
 MODULE_DEF(os) = {
   .init = os_init,
